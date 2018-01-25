@@ -12,7 +12,7 @@ public static class Converter
         float r = Mathf.Sqrt(x * x + y * y + z * z);
         float theta = Mathf.Asin(y / r);
         float phi = Mathf.Atan2(z, x);
-        return new Vector3(r, theta, phi);
+        return new Vector3(r, theta, phi < 0 ? Mathf.PI * 2 - Mathf.Abs(phi)  : phi);
     }
     public static Vector3 SphericalToCartesian(Vector3 sphericalCoordinates)
     {

@@ -63,9 +63,9 @@ public class Camera : MonoBehaviour
             Physics.Raycast(ray,out info);
             var sc = Converter.CartesianToSpherical(info.point);
             var cc = Converter.SphericalToCartesian(sc);
-            Debug.Log("Декартовы координаты точки: " + info.point);
-            Debug.Log("Сферические координаты точки: " + sc);
-            Debug.Log("Декартовы координаты точки: " + cc);
+           // Debug.Log("Декартовы координаты точки: " + info.point);
+            Debug.Log("Сферические координаты точки: " + sc.y * Mathf.Rad2Deg + " " + sc.z * Mathf.Rad2Deg);
+          //  Debug.Log("Декартовы координаты точки: " + cc);
             Instantiate(Point,cc,Quaternion.identity);
         }
     }
