@@ -1,68 +1,35 @@
 ﻿
+
 using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
     public GameObject sphere;
+    public GameObject rot;
+    public GameObject scroll_view;
+
     public float Speed = 4;
     public GameObject Point;
     private int pointIndex = 0;
+ 
     void Start()
     {
+
         GeoLines earthLines = new GeoLines(25);
-     //   Debug.Log(new PointC(new Vector3(5,0,180),InputType.Degrees).PhiRad);
-        var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
-        var p2 = new PointC(new Vector3(5, 0, 90), InputType.Degrees);
-        var vertex = new PointC(new Vector3(5, 90, 0), InputType.Degrees);
-       Debug.Log(MathS.TriangleArea(p1,p2,vertex));
-        
-     
+        //var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
+        //var p2 = new PointC(new Vector3(5, 0, 90), InputType.Degrees);
+        //var vertex = new PointC(new Vector3(5, 90, 0), InputType.Degrees);
+
+
     }
 
-    private float a = 0;
+  
 
-    private void cp()
-    {
-        Destroy(GameObject.Find("point(Clone)"));
-        Instantiate(Point, Converter.SphericalToCartesian(new Vector3(5, Mathf.Sin(a)*10 * Mathf.Deg2Rad, a * Mathf.Deg2Rad)), Quaternion.identity);
-        Debug.Log(a);
-        a += Time.deltaTime*20;
-        
-    }
+
     void Update()
     {
-     //   cp();
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(-Vector3.right * Time.deltaTime * Speed);
-            transform.LookAt(sphere.transform);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * Speed);
-            transform.LookAt(sphere.transform);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(Vector3.up * Time.deltaTime * Speed);
-            transform.LookAt(sphere.transform);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(-Vector3.up * Time.deltaTime * Speed);
-            transform.LookAt(sphere.transform);
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
-        {
-            Vector3 v = transform.position + transform.forward * (Time.deltaTime * transform.position.magnitude * transform.position.magnitude) * Input.GetAxis("Mouse ScrollWheel") * 5;
-            if (this.transform.position.magnitude > v.magnitude)
-            this.transform.position = (v.magnitude < 5.5f) ? this.transform.position : v;
-            if (this.transform.position.magnitude < v.magnitude)
-                this.transform.position = (v.magnitude > 15f) ? this.transform.position : v;
-            //     if (Vector3.Distance(v, pointer.P) < pointer.R * 3 && Vector3.Distance(v, pointer.P) > pointer.R * 1.7f)
-            //      transform.position += transform.forward * Time.deltaTime * Input.GetAxis("Mouse ScrollWheel") * 10;
-        }
+        CameraManager();
+       
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = this.GetComponent<UnityEngine.Camera>().ScreenPointToRay(Input.mousePosition);
@@ -73,6 +40,31 @@ public class Camera : MonoBehaviour
             Instantiate(Point,cc,Quaternion.identity).name = "point_" + pointIndex; 
             pointIndex++;
 
+        }
+    }
+
+
+    void CameraManager()
+    {
+        if (Input.GetAxis("Horizontal") != 0)
+        {           
+            rot.transform.Rotate(Vector3.up, -Input.GetAxis("Horizontal") * Speed * Time.deltaTime * 10, Space.World);           
+        }
+        if (Input.GetAxis("Vertical") != 0)
+        {
+            if (Input.GetAxis("Vertical") > 0)
+                rot.transform.Rotate(Vector3.right, (Mathf.Repeat(rot.transform.rotation.eulerAngles.x + 180, 360) - 90 < 170) ? Input.GetAxis("Vertical") * Speed * Time.deltaTime * 10 : 0, Space.Self);
+            else
+                rot.transform.Rotate(Vector3.right, (Mathf.Repeat(rot.transform.rotation.eulerAngles.x + 180, 360) - 90 > 10) ? Input.GetAxis("Vertical") * Speed * Time.deltaTime * 10 : 0, Space.Self);
+        }
+        
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            Vector3 v = transform.position + transform.forward * (Time.deltaTime * transform.position.magnitude * transform.position.magnitude) * Input.GetAxis("Mouse ScrollWheel") * 5;
+            if (this.transform.position.magnitude > v.magnitude)
+                this.transform.position = (v.magnitude < 5.5f) ? this.transform.position : v;
+            if (this.transform.position.magnitude < v.magnitude)
+                this.transform.position = (v.magnitude > 15f) ? this.transform.position : v;
         }
     }
     

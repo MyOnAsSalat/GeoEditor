@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
+
 class GeoLines : MonoBehaviour
 {
     static int GeoCount = 0;
