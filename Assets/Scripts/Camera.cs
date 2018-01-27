@@ -6,10 +6,17 @@ public class Camera : MonoBehaviour
     public GameObject sphere;
     public float Speed = 4;
     public GameObject Point;
+    private int pointIndex = 0;
     void Start()
     {
         GeoLines earthLines = new GeoLines(25);
-       // Instantiate(Point, TestConverter.SphericalToCartesian(new Vector3(5, 0 * Mathf.Deg2Rad, 180f * Mathf.Deg2Rad)),Quaternion.identity);
+     //   Debug.Log(new PointC(new Vector3(5,0,180),InputType.Degrees).PhiRad);
+        var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
+        var p2 = new PointC(new Vector3(5, 0, 90), InputType.Degrees);
+        var vertex = new PointC(new Vector3(5, 90, 0), InputType.Degrees);
+       Debug.Log(MathS.AngleByPoint(p1,vertex,p2));
+        
+     
     }
 
     private float a = 0;
@@ -48,7 +55,7 @@ public class Camera : MonoBehaviour
         }
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
-            Vector3 v = transform.position + transform.forward * Time.deltaTime * Input.GetAxis("Mouse ScrollWheel") * 50;
+            Vector3 v = transform.position + transform.forward * (Time.deltaTime * transform.position.magnitude * transform.position.magnitude) * Input.GetAxis("Mouse ScrollWheel") * 5;
             if (this.transform.position.magnitude > v.magnitude)
             this.transform.position = (v.magnitude < 5.5f) ? this.transform.position : v;
             if (this.transform.position.magnitude < v.magnitude)
@@ -63,10 +70,9 @@ public class Camera : MonoBehaviour
             Physics.Raycast(ray,out info);
             var sc = Converter.CartesianToSpherical(info.point);
             var cc = Converter.SphericalToCartesian(sc);
-           // Debug.Log("Декартовы координаты точки: " + info.point);
-            Debug.Log("Сферические координаты точки: " + sc.y * Mathf.Rad2Deg + " " + sc.z * Mathf.Rad2Deg);
-          //  Debug.Log("Декартовы координаты точки: " + cc);
-            Instantiate(Point,cc,Quaternion.identity);
+            Instantiate(Point,cc,Quaternion.identity).name = "point_" + pointIndex; 
+            pointIndex++;
+
         }
     }
     

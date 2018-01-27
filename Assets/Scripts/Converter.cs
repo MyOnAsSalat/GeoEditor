@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
 public static class Converter
 {
     public static Vector3 CartesianToSpherical(Vector3 cartesianCoordinates)
@@ -24,5 +21,4 @@ public static class Converter
         float y = r * Mathf.Sin(theta);
         return new Vector3(x, y, z);
     }
-
 }
