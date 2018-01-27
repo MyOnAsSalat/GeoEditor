@@ -39,9 +39,20 @@ public static class MathS
         float a = ArcLengthRad(vertex, p1);
         float b = ArcLengthRad(vertex, p2);
         float c = ArcLengthRad(p1, p2);
-        Debug.Log(new Vector3(a,b,c));
         return  Mathf.Acos((Mathf.Cos(b) - Mathf.Cos(c) * Mathf.Cos(a)) / (Mathf.Sin(c) * Mathf.Sin(a)));
     }
+    public static float TriangleExcess(PointC p1, PointC p2, PointC p3)
+    {
+        float A = AngleByPoint(p1, p2, p3);
+        float B = AngleByPoint(p3, p1, p2);
+        float C = AngleByPoint(p2, p3, p1);
+        return A + B + C - Mathf.PI;
+    }
+    public static float TriangleArea(PointC p1, PointC p2, PointC p3)
+    {
+        return TriangleExcess(p1, p2, p3) * p1.R;
+    }
+
 }
 public enum InputType
 {

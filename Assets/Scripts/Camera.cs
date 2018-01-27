@@ -14,7 +14,7 @@ public class Camera : MonoBehaviour
         var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
         var p2 = new PointC(new Vector3(5, 0, 90), InputType.Degrees);
         var vertex = new PointC(new Vector3(5, 90, 0), InputType.Degrees);
-       Debug.Log(MathS.AngleByPoint(p1,vertex,p2));
+       Debug.Log(MathS.TriangleArea(p1,p2,vertex));
         
      
     }
