@@ -1,13 +1,15 @@
 ﻿
 
 using UnityEngine;
+using UnityEngine.Internal.Experimental.UIElements;
+using UnityEngine.UI;
 
 public class Camera : MonoBehaviour
 {
     public GameObject sphere;
     public GameObject rot;
-    public GameObject scroll_view;
-
+    public GameObject scroll_view_content;
+    public PanelWrapper panel;
     public float Speed = 4;
     public GameObject Point;
     private int pointIndex = 0;
@@ -19,7 +21,7 @@ public class Camera : MonoBehaviour
         //var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
         //var p2 = new PointC(new Vector3(5, 0, 90), InputType.Degrees);
         //var vertex = new PointC(new Vector3(5, 90, 0), InputType.Degrees);
-
+        
 
     }
 
@@ -28,18 +30,25 @@ public class Camera : MonoBehaviour
 
     void Update()
     {
+
+
         CameraManager();
        
         if (Input.GetMouseButtonDown(0))
         {
+
             Ray ray = this.GetComponent<UnityEngine.Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit info; 
             Physics.Raycast(ray,out info);
-            var sc = Converter.CartesianToSpherical(info.point);
-            var cc = Converter.SphericalToCartesian(sc);
-            Instantiate(Point,cc,Quaternion.identity).name = "point_" + pointIndex; 
-            pointIndex++;
-
+            if (info.transform != null)
+            {
+                var sc = Converter.CartesianToSpherical(info.point);
+                var cc = Converter.SphericalToCartesian(sc);
+                Instantiate(Point, cc, Quaternion.identity).name = "point_" + pointIndex;
+                pointIndex++;
+                var text =  scroll_view_content.AddComponent<Text>();
+                text.text = sc.ToString();
+            }
         }
     }
 
@@ -47,7 +56,11 @@ public class Camera : MonoBehaviour
     void CameraManager()
     {
         if (Input.GetAxis("Horizontal") != 0)
-        {           
+        {
+            Vector3 mousePos = Input.mousePosition;
+            
+            Resolution a = Screen.currentResolution;
+            Debug.Log(UnityEngine.Camera.current.pixelRect);
             rot.transform.Rotate(Vector3.up, -Input.GetAxis("Horizontal") * Speed * Time.deltaTime * 10, Space.World);           
         }
         if (Input.GetAxis("Vertical") != 0)
