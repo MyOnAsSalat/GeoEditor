@@ -30,13 +30,9 @@ public class Camera : MonoBehaviour
 
     void Update()
     {
-
-
-        CameraManager();
-       
+        CameraManager();    
         if (Input.GetMouseButtonDown(0))
         {
-
             Ray ray = this.GetComponent<UnityEngine.Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit info; 
             Physics.Raycast(ray,out info);
@@ -46,8 +42,6 @@ public class Camera : MonoBehaviour
                 var cc = Converter.SphericalToCartesian(sc);
                 Instantiate(Point, cc, Quaternion.identity).name = "point_" + pointIndex;
                 pointIndex++;
-                var text =  scroll_view_content.AddComponent<Text>();
-                text.text = sc.ToString();
             }
         }
     }
@@ -57,10 +51,6 @@ public class Camera : MonoBehaviour
     {
         if (Input.GetAxis("Horizontal") != 0)
         {
-            Vector3 mousePos = Input.mousePosition;
-            
-            Resolution a = Screen.currentResolution;
-            Debug.Log(UnityEngine.Camera.current.pixelRect);
             rot.transform.Rotate(Vector3.up, -Input.GetAxis("Horizontal") * Speed * Time.deltaTime * 10, Space.World);           
         }
         if (Input.GetAxis("Vertical") != 0)
