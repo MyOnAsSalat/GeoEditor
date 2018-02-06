@@ -12,11 +12,12 @@ public class Camera : MonoBehaviour
     public PanelWrapper panel;
     public float Speed = 4;
     public GameObject Point;
+    public IReceiver manager;
     private int pointIndex = 0;
  
     void Start()
     {
-
+        manager = GameObject.Find("Canvas").GetComponent<UIManager>();
         GeoLines earthLines = new GeoLines(25);
         //var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
         //var p2 = new PointC(new Vector3(5, 0, 90), InputType.Degrees);
@@ -31,17 +32,14 @@ public class Camera : MonoBehaviour
     void Update()
     {
         CameraManager();    
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             Ray ray = this.GetComponent<UnityEngine.Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit info; 
             Physics.Raycast(ray,out info);
             if (info.transform != null)
             {
-                var sc = Converter.CartesianToSpherical(info.point);
-                var cc = Converter.SphericalToCartesian(sc);
-                Instantiate(Point, cc, Quaternion.identity).name = "point_" + pointIndex;
-                pointIndex++;
+                manager.Set(new PointC(info.point,InputType.Cartesian));
             }
         }
     }

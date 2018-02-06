@@ -65,8 +65,8 @@ public class PointC
     public readonly float R;
     public readonly float ThetaRad;
     public readonly float PhiRad;
-    public float ThetaDeg {get { return ThetaRad * Mathf.Rad2Deg; }}
-    public float PhiDeg   {get { return PhiRad * Mathf.Rad2Deg; }}
+    public float ThetaDeg => ThetaRad * Mathf.Rad2Deg;
+    public float PhiDeg => PhiRad * Mathf.Rad2Deg;
     public readonly Vector3 point; 
     public PointC(Vector3 p,InputType type)
     {
