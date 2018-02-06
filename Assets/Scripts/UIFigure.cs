@@ -53,6 +53,7 @@ public class UIFigure : MonoBehaviour, IReceiver
 
     public void Figure_OnPointChange()
     {
+        return;
         int count = transform.childCount - 1;
         if (count == 0)
         {
@@ -60,14 +61,17 @@ public class UIFigure : MonoBehaviour, IReceiver
             LengthLabel.transform.GetChild(0).GetComponent<Text>().text = "0";
         }
         PointC[] points = new PointC[count];
-        for (int i =0;i < count; i++)
+        AddPointButton.transform.SetSiblingIndex(count + 1);
+        for (int i = 0; i < count-1; i++)
         {
-          points[i] = transform.GetChild(i).GetComponent<UIPoint>().Point;
+            
+            points[i] = transform.Find("scroll_view/Viewport/Content").GetChild(count - i + 1).GetComponent<UIPoint>().Point;
+            Debug.Log(points[i].point);
         }
         float DegreesLength = 0;
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count-1; i++)
         {
-          DegreesLength +=  MathS.ArcLength(points[i], points[i + 1]);
+            DegreesLength += MathS.ArcLength(points[i], points[i + 1]);
         }
         AreaLabel.transform.GetChild(0).GetComponent<Text>().text = "0";
         if (Loop)
@@ -79,6 +83,7 @@ public class UIFigure : MonoBehaviour, IReceiver
         {
             LengthLabel.transform.GetChild(0).GetComponent<Text>().text = Convert.ToString(DegreesLength);
         }
+
     }
     public void AddPointButton_OnClick()
     {

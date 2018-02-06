@@ -40,6 +40,7 @@ public class UIPoint : MonoBehaviour, IReceiver
         PhiField.text = Convert.ToString(p.PhiDeg).Replace(",", ".");
         Figure = transform.parent.parent.parent.parent.GetComponent<UIFigure>();
         transform.localScale = Vector3.one;
+        Figure.UIPoint_OnChange();
     }
     public void Deselect()
     {
@@ -70,7 +71,7 @@ public class UIPoint : MonoBehaviour, IReceiver
     }
     public void Destroy()
     {
-        Figure.UIPoint_OnDestroy();
+        Figure.UIPoint_OnChange();
       if (RenderPoint != null)  Destroy(RenderPoint);   
       Destroy(gameObject);
     }
