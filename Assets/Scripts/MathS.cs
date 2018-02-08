@@ -1,8 +1,9 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class MathS
 {
+    //Перевод из декартовых в сферические, при условии что центр сферы в 0,0,0
+    //z - y изменены для координат unity
     public static Vector3 CartToSpher(Vector3 cartesianCoordinates)
     {
         float x = cartesianCoordinates.x;
@@ -13,6 +14,8 @@ public static class MathS
         float phi = Mathf.Atan2(z, x);
         return new Vector3(r, theta, phi < 0 ? Mathf.PI * 2 - Mathf.Abs(phi) : phi);
     }
+    //Перевод из сферических к декартовым: радиус, тета, фи
+    //z - y изменены для координат unity
     public static Vector3 SpherToCart(Vector3 sphericalCoordinates)
     {
         float r = sphericalCoordinates.x;
@@ -23,17 +26,17 @@ public static class MathS
         float y = r * Mathf.Sin(theta);
         return new Vector3(x, y, z);
     }
-
+    //Угловое расстояние между точками в радианах
     public static float ArcLengthRad(PointC p1, PointC p2)
     {
-        return Mathf.Acos(Mathf.Sin(p1.PhiRad) * Mathf.Sin(p2.PhiRad) +  Mathf.Cos(p1.PhiRad) * Mathf.Cos(p2.PhiRad) * Mathf.Cos(p1.ThetaRad - p2.ThetaRad));
+        return Mathf.Acos(Mathf.Sin(p1.ThetaRad) * Mathf.Sin(p2.ThetaRad) +  Mathf.Cos(p1.ThetaRad) * Mathf.Cos(p2.ThetaRad) * Mathf.Cos(p1.PhiRad - p2.PhiRad));
     }
-
+    //Угловое расстояние между точками в градусах
     public static float ArcLength(PointC p1, PointC p2)
     {
         return ArcLengthRad(p1, p2) * p1.R;
     }
-
+    //Угол по трём точкам
     public static float AngleByPoint(PointC p1, PointC vertex, PointC p2)
     {
         float a = ArcLengthRad(vertex, p1);
@@ -41,6 +44,7 @@ public static class MathS
         float c = ArcLengthRad(p1, p2);
         return  Mathf.Acos((Mathf.Cos(b) - Mathf.Cos(c) * Mathf.Cos(a)) / (Mathf.Sin(c) * Mathf.Sin(a)));
     }
+    //Сферический эксцесс для треугольника
     public static float TriangleExcess(PointC p1, PointC p2, PointC p3)
     {
         float A = AngleByPoint(p1, p2, p3);
@@ -48,6 +52,7 @@ public static class MathS
         float C = AngleByPoint(p2, p3, p1);
         return A + B + C - Mathf.PI;
     }
+    //Площадь треугольника через сферический эксцесс
     public static float TriangleArea(PointC p1, PointC p2, PointC p3)
     {
         return TriangleExcess(p1, p2, p3) * p1.R;
