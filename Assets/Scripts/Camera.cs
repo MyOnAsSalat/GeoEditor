@@ -19,10 +19,11 @@ public class Camera : MonoBehaviour
     {
         manager = GameObject.Find("Canvas").GetComponent<UIManager>();
         GeoLines earthLines = new GeoLines(25);
-        //var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
-        //var p2 = new PointC(new Vector3(5, 0, 90), InputType.Degrees);
-        //var vertex = new PointC(new Vector3(5, 90, 0), InputType.Degrees);
-        
+        var p1 = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
+        var p2 = new PointC(new Vector3(5, 0, 180), InputType.Degrees);
+        var vertex = new PointC(new Vector3(5, -90, 0), InputType.Degrees);
+        var result = MathS.TriangleArea(p1, vertex,p2);
+        Debug.Log(result);
 
     }
 
