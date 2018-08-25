@@ -75,7 +75,7 @@ public class UIManager : MonoBehaviour, IReceiver
     public void AddFigureButton_OnClick()
     {
         GameObject uiFigure = Instantiate(this.PrefabUIFigureImagePanel, Vector3.zero, Quaternion.identity);
-        uiFigure.transform.parent = transform.Find("Panel/figures_scroll_view/Viewport/Content");
+//        uiFigure.transform.parent = transform.Find("Panel/figures_scroll_view/Viewport/Content");
         AddFigureButton.transform.SetSiblingIndex(transform.Find("Panel/figures_scroll_view/Viewport/Content").childCount - 1);
     }
     void Start ()

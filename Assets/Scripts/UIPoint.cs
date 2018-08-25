@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
@@ -27,8 +25,7 @@ public class UIPoint : MonoBehaviour, IReceiver
         MathPoint = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
         Manager = GameObject.Find("Canvas").GetComponent<UIManager>(); 
         RenderPoint = Instantiate(Manager.PrefabPoint, MathPoint.Point, Quaternion.identity);
-        RenderPoint.transform.parent = transform;
-        
+        RenderPoint.transform.parent = transform;     
     }
     public void Set(PointC p)
     {

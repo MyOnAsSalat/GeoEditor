@@ -139,6 +139,8 @@ public class UIFigure : MonoBehaviour, IReceiver
         Manager = GameObject.Find("Canvas").GetComponent<UIManager>();
         AddPointButton = transform.Find("scroll_view/Viewport/Content/add_point_button").GetComponent<Button>();
         AddPointButton.onClick.AddListener(AddPointButton_OnClick);
+        transform.parent = Manager.transform.Find("Panel/figures_scroll_view/Viewport/Content");
+        transform.localScale = Vector3.one;
     }
 
     public void AddUIPoint(UIPoint point)
