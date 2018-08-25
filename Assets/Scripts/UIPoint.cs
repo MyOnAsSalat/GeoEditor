@@ -26,7 +26,7 @@ public class UIPoint : MonoBehaviour, IReceiver
         SelectPointButton.onClick.AddListener(SelectPointButton_OnClick);
         MathPoint = new PointC(new Vector3(5, 0, 0), InputType.Degrees);
         Manager = GameObject.Find("Canvas").GetComponent<UIManager>(); 
-        RenderPoint = Instantiate(Manager.PrefabPoint, MathPoint.point, Quaternion.identity);
+        RenderPoint = Instantiate(Manager.PrefabPoint, MathPoint.Point, Quaternion.identity);
         RenderPoint.transform.parent = transform;
         
     }
@@ -34,12 +34,13 @@ public class UIPoint : MonoBehaviour, IReceiver
     {
         if (RenderPoint != null)  Destroy(RenderPoint);        
         MathPoint = p;
-        RenderPoint = Instantiate(Manager.PrefabPoint, MathPoint.point, Quaternion.identity);
+        RenderPoint = Instantiate(Manager.PrefabPoint, MathPoint.Point, Quaternion.identity);
         RenderPoint.name = "render_point";
         ThetaField.text = Convert.ToString(p.ThetaDeg).Replace(",",".");
         PhiField.text = Convert.ToString(p.PhiDeg).Replace(",", ".");
         Figure = transform.parent.parent.parent.parent.GetComponent<UIFigure>();
         transform.localScale = Vector3.one;
+        Figure.AddUIPoint(this);
         Figure.UIPoint_OnChange();
     }
     public void Deselect()
@@ -67,12 +68,14 @@ public class UIPoint : MonoBehaviour, IReceiver
         {
             MathPoint = new PointC(new Vector3(Manager.Radius, theta, phi), InputType.Degrees);
             Set(MathPoint);
-        }      
+        }     
+        Figure.UIPoint_OnChange();
     }
     public void Destroy()
-    {
+    {       
+        if (RenderPoint != null)  Destroy(RenderPoint);   
+        Destroy(gameObject);
+        Figure.RemoveUIPoint(this);
         Figure.UIPoint_OnChange();
-      if (RenderPoint != null)  Destroy(RenderPoint);   
-      Destroy(gameObject);
     }
 }

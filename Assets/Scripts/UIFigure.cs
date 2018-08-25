@@ -14,9 +14,11 @@ public class UIFigure : MonoBehaviour, IReceiver
     private Button AreaLabel;
     private Button AddPointButton;
     private bool Loop = false;
+    private List<UIPoint> UIPointList = new List<UIPoint>();
+    private List<LineSegment> LineSegmenList = new List<LineSegment>();
     public void Set(PointC p)
     {
-      GameObject uiPoint = Instantiate(Manager.PrefabUIPoint, Vector3.zero, Quaternion.identity);
+        GameObject uiPoint = Instantiate(Manager.PrefabUIPoint, Vector3.zero, Quaternion.identity);
         uiPoint.transform.parent = transform.Find("scroll_view/Viewport/Content");
         uiPoint.GetComponent<IReceiver>().Set(p);
         AddPointButton.transform.SetSiblingIndex(transform.Find("scroll_view/Viewport/Content").childCount-1);
@@ -51,8 +53,10 @@ public class UIFigure : MonoBehaviour, IReceiver
         Figure_OnPointChange();
     }
 
-    public void Figure_OnPointChange()
+    private void Figure_OnPointChange()
     {
+        LineSegmentDrawing();
+        AngularLengthEstimating();
         return;
         int count = transform.childCount - 1;
         if (count == 0)
@@ -66,7 +70,7 @@ public class UIFigure : MonoBehaviour, IReceiver
         {
             
             points[i] = transform.Find("scroll_view/Viewport/Content").GetChild(count - i + 1).GetComponent<UIPoint>().Point;
-            Debug.Log(points[i].point);
+         //   Debug.Log(points[i].Point);
         }
         float DegreesLength = 0;
         for (int i = 0; i < count-1; i++)
@@ -83,6 +87,36 @@ public class UIFigure : MonoBehaviour, IReceiver
         {
             LengthLabel.transform.GetChild(0).GetComponent<Text>().text = Convert.ToString(DegreesLength);
         }
+
+    }
+
+    private void LineSegmentDrawing()
+    {
+        LineSegmenList.ForEach(x => x.Destroy());
+        LineSegmenList.Clear();
+        if (UIPointList.Count < 2) return;
+        var buffer = UIPointList[0];
+        for (int i = 1; i < UIPointList.Count; i++)
+        {
+            LineSegmenList.Add(new LineSegment(buffer.Point,UIPointList[i].Point));
+            buffer = UIPointList[i];
+        }
+        if(Loop && UIPointList.Count>2) { LineSegmenList.Add(new LineSegment(UIPointList[0].Point, UIPointList[UIPointList.Count - 1].Point)); }
+
+    }
+    private void AngularLengthEstimating()
+    {
+        float arcLength = 0;
+        LengthLabel.transform.GetChild(0).GetComponent<Text>().text = arcLength.ToString();
+        if (UIPointList.Count < 2) return;
+        var buffer = UIPointList[0];       
+        for (int i = 1; i < UIPointList.Count; i++)
+        {
+            arcLength += MathS.ArcLength(buffer.Point, UIPointList[i].Point);
+            buffer = UIPointList[i];
+        }
+        if (Loop && UIPointList.Count > 2) { arcLength += MathS.ArcLength(UIPointList[0].Point, UIPointList[UIPointList.Count-1].Point); }
+        LengthLabel.transform.GetChild(0).GetComponent<Text>().text = arcLength.ToString();
 
     }
     public void AddPointButton_OnClick()
@@ -107,6 +141,16 @@ public class UIFigure : MonoBehaviour, IReceiver
         AddPointButton.onClick.AddListener(AddPointButton_OnClick);
     }
 
+    public void AddUIPoint(UIPoint point)
+    {
+        if (UIPointList.Contains(point)) return;
+        UIPointList.Add(point);
+    }
+
+    public void RemoveUIPoint(UIPoint point)
+    {
+        UIPointList.Remove(point);
+    }
     public void Destroy()
     {
        

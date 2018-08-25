@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-
+﻿using System.Collections.Generic;
+using UnityEngine;
 public static class MathS
 {
     //Перевод из декартовых в сферические, при условии что центр сферы в 0,0,0
@@ -34,7 +34,7 @@ public static class MathS
     //Угловое расстояние между точками в градусах
     public static float ArcLength(PointC p1, PointC p2)
     {
-        return ArcLengthRad(p1, p2) * p1.R;
+        return ArcLengthRad(p1, p2) * Mathf.Rad2Deg;
     }
     //Угол по трём точкам
     public static float AngleByPoint(PointC p1, PointC vertex, PointC p2)
@@ -58,6 +58,27 @@ public static class MathS
         return TriangleExcess(p1, p2, p3) * p1.R;
     }
 
+   
+    //Получение промежуточных точек кратчайшего расстояния между двумя точками на сфере в Unity
+    public static Vector3[] GetIntermeditatePoints(PointC point1, PointC point2,int segmentCount)
+    {
+        var center = Vector3.zero;
+        var p1 = point1.Point - center;
+        var p2 = point2.Point - center;
+        var radius = p2.magnitude + 0.01f;
+
+        var points = new Vector3[segmentCount + 1];
+
+        for (int i = 0; i < segmentCount + 1; i++)
+        {
+            var k = (float)i / segmentCount;
+            var p = Vector3.Slerp(p1, p2, k);
+            p = p.normalized * radius;
+            points[i] = center + p;
+        }
+        return points;
+    }
+
 }
 public enum InputType
 {
@@ -72,7 +93,15 @@ public class PointC
     public readonly float PhiRad;
     public float ThetaDeg => ThetaRad * Mathf.Rad2Deg;
     public float PhiDeg => PhiRad * Mathf.Rad2Deg;
-    public readonly Vector3 point; 
+    public readonly Vector3 Point;
+
+    public PointC(float _phiRad, float _thetaRad,float _r = 5)
+    {
+        PhiRad = _phiRad;
+        ThetaRad = _thetaRad;
+        R = _r;
+        Point = MathS.SpherToCart(new Vector3(R,ThetaRad,PhiRad));
+    }
     public PointC(Vector3 p,InputType type)
     {
         switch (type)
@@ -81,20 +110,20 @@ public class PointC
                 R = p.x;
                 ThetaRad = p.y;
                 PhiRad = p.z;
-                point = MathS.SpherToCart(p);
+                Point = MathS.SpherToCart(p);
                 break;
             case InputType.Degrees:
                 R = p.x;
                 ThetaRad = p.y * Mathf.Deg2Rad;
                 PhiRad = p.z * Mathf.Deg2Rad;
-                point = MathS.SpherToCart(new Vector3(p.x,ThetaRad,PhiRad));
+                Point = MathS.SpherToCart(new Vector3(R,ThetaRad,PhiRad));
                 break;
             case InputType.Cartesian:
                 Vector3 rad = MathS.CartToSpher(p);
                 R = rad.x;
                 ThetaRad = rad.y;
                 PhiRad = rad.z;
-                point = p;
+                Point = p;
                 break;
         }
     }
@@ -103,6 +132,6 @@ public class PointC
         R = p.R;
         ThetaRad = p.ThetaRad;
         PhiRad = p.PhiRad;
-        point = p.point;
+        Point = p.Point;
     }
 }

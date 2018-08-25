@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Camera = UnityEngine.Camera;
 
-class GeoLines : MonoBehaviour
+class GeoLines 
 {
     static int GeoCount = 0;
     int MeredianLineCount = 0;
@@ -11,11 +14,11 @@ class GeoLines : MonoBehaviour
     private GameObject[] Meredian;
     private GameObject[] Parralel;
     private GameObject GeoCatalog;
+    public GameObject plane;
     private const float rotate = 0.57f + Mathf.PI/2;
 
     public GeoLines(int meredianCount = 24, int parralelsCount = 17, float r = 5, float x = 0, float y = 0, float z = 0, float linewWith = 0.010f)
     {
-
         Meredian = new GameObject[meredianCount];
         Parralel = new GameObject[parralelsCount-2];
         GeoCount++;
@@ -29,12 +32,12 @@ class GeoLines : MonoBehaviour
         SetMeredian(meredianCount);
         SetParralel(parralelsCount);
     }
+   
 
     void SetMeredian(int count)
     {
         for (int i = 0; i < count; i++)
-        {
-            
+        {           
             Meredian[MeredianLineCount] = new GameObject("MeredianLine_" + (MeredianLineCount+1));
             Meredian[MeredianLineCount].transform.parent = GeoCatalog.transform;
             var renderer = Meredian[MeredianLineCount].AddComponent<LineRenderer>();
@@ -85,13 +88,13 @@ class GeoLines : MonoBehaviour
     {
         foreach (var o in Parralel)
         {
-            Destroy(o);
+            GameObject.Destroy(o);
         }
         foreach (var o in Meredian)
         {
-          Destroy(o);  
+            GameObject.Destroy(o);  
         }
-        Destroy(GeoCatalog);
+        GameObject.Destroy(GeoCatalog);
     }
 }
 
