@@ -19,7 +19,7 @@ public class UIFigure : MonoBehaviour, IReceiver
     public void Set(PointC p)
     {
         GameObject uiPoint = Instantiate(Manager.PrefabUIPoint, Vector3.zero, Quaternion.identity);
-        uiPoint.transform.parent = transform.Find("scroll_view/Viewport/Content");
+        uiPoint.transform.SetParent(transform.Find("scroll_view/Viewport/Content"));
         uiPoint.GetComponent<IReceiver>().Set(p);
         AddPointButton.transform.SetSiblingIndex(transform.Find("scroll_view/Viewport/Content").childCount-1);
     }
@@ -139,7 +139,7 @@ public class UIFigure : MonoBehaviour, IReceiver
         Manager = GameObject.Find("Canvas").GetComponent<UIManager>();
         AddPointButton = transform.Find("scroll_view/Viewport/Content/add_point_button").GetComponent<Button>();
         AddPointButton.onClick.AddListener(AddPointButton_OnClick);
-        transform.parent = Manager.transform.Find("Panel/figures_scroll_view/Viewport/Content");
+        transform.SetParent(Manager.transform.Find("Panel/figures_scroll_view/Viewport/Content"));
         transform.localScale = Vector3.one;
     }
 
@@ -155,7 +155,13 @@ public class UIFigure : MonoBehaviour, IReceiver
     }
     public void Destroy()
     {
-       
-        
+        Manager.Receiver = null;
+            foreach (var val in UIPointList)
+            {
+                val.Remove();
+            }
+        UIPointList.Clear();
+        Figure_OnPointChange();
+        Destroy(gameObject);
     }
 }

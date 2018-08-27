@@ -14,6 +14,12 @@ public class UIManager : MonoBehaviour, IReceiver
     public Button RemoveButton;
     public Button AddFigureButton;
     public Button DeselectButton;
+    public Button GridButton;
+    public Button SpereMeshButton;
+    public GameObject GeoCatalog;
+    public MeshRenderer SphereMesh;
+
+
     public float Radius = 5;
     private IReceiver receiver;
     public IReceiver Receiver
@@ -57,7 +63,39 @@ public class UIManager : MonoBehaviour, IReceiver
         receiver?.Deselect();
         receiver = null;
     }
-  
+
+    private bool GeoCatalogActive = true;
+    public void GridButton_OnClick()
+    {
+        if (GeoCatalog == null) {GeoCatalog = GameObject.Find("GeoCatalog_1"); }
+        if (GeoCatalogActive)
+        {
+            GridButton.GetComponentInChildren<Text>().text = "Включить сетку";
+            GeoCatalogActive = false;
+            GeoCatalog.SetActive(false);
+        }
+        else
+        {
+            GridButton.GetComponentInChildren<Text>().text = "Отключить сетку";
+            GeoCatalogActive = true;
+            GeoCatalog.SetActive(true);
+        }
+    }
+
+    public void SphereMeshButton_OnClick()
+    {
+        if (SphereMesh.enabled)
+        {
+            SpereMeshButton.GetComponentInChildren<Text>().text = "Включить сферу";
+            SphereMesh.enabled = false;
+        }
+        else
+        {
+            SpereMeshButton.GetComponentInChildren<Text>().text = "Отключить сферу";
+            SphereMesh.enabled = true;
+        }
+    }
+
     public void Set(PointC p)
     {
         Receiver?.Set(p);
@@ -75,13 +113,17 @@ public class UIManager : MonoBehaviour, IReceiver
     public void AddFigureButton_OnClick()
     {
         GameObject uiFigure = Instantiate(this.PrefabUIFigureImagePanel, Vector3.zero, Quaternion.identity);
-//        uiFigure.transform.parent = transform.Find("Panel/figures_scroll_view/Viewport/Content");
         AddFigureButton.transform.SetSiblingIndex(transform.Find("Panel/figures_scroll_view/Viewport/Content").childCount - 1);
     }
     void Start ()
     {
         AddFigureButton = transform.Find("Panel/figures_scroll_view/Viewport/Content/add_figure_button").GetComponent<Button>();
         AddFigureButton.onClick.AddListener(AddFigureButton_OnClick);      
+    }
+
+    void Awake()
+    {
+        SphereMesh = GameObject.Find("Sphere").GetComponent<MeshRenderer>();
     }
     void Update ()
     {

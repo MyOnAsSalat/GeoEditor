@@ -75,4 +75,11 @@ public class UIPoint : MonoBehaviour, IReceiver
         Figure.RemoveUIPoint(this);
         Figure.UIPoint_OnChange();
     }
+
+    public void Remove()
+    {
+        if (RenderPoint != null) Destroy(RenderPoint);
+        Destroy(gameObject);
+    }
+    
 }

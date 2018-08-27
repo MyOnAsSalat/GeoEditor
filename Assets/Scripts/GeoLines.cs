@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Camera = UnityEngine.Camera;
 
-class GeoLines 
+public class GeoLines 
 {
     static int GeoCount = 0;
     int MeredianLineCount = 0;

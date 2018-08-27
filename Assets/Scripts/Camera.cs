@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Camera : MonoBehaviour
 {
-    public GameObject sphere;
+    public GameObject sphere;   
     public GameObject rot;
     public GameObject scroll_view_content;
     public PanelWrapper panel;
@@ -15,7 +15,9 @@ public class Camera : MonoBehaviour
     public GameObject Point;
     public IReceiver manager;
     private int pointIndex = 0;
- 
+
+    public GameObject geo_catalog;
+    public GameObject spere_mesh;
     void Start()
     {
         manager = GameObject.Find("Canvas").GetComponent<UIManager>();
