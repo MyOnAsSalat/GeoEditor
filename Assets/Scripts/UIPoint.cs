@@ -33,6 +33,7 @@ public class UIPoint : MonoBehaviour, IReceiver
         MathPoint = p;
         RenderPoint = Instantiate(Manager.PrefabPoint, MathPoint.Point, Quaternion.identity);
         RenderPoint.name = "render_point";
+        RenderPoint.transform.SetParent(GameObject.Find("RenderPoint_Calatog").transform);
         ThetaField.text = Convert.ToString(p.ThetaDeg).Replace(",",".");
         PhiField.text = Convert.ToString(p.PhiDeg).Replace(",", ".");
         Figure = transform.parent.parent.parent.parent.GetComponent<UIFigure>();

@@ -44,7 +44,7 @@ public class GeoLines
             MeredianLineCount++;
             renderer.startWidth = (i == 0) ? LineWidth * 2 : LineWidth;
             renderer.endWidth = (i == 0) ? LineWidth * 2 : LineWidth;
-            renderer.material.color = (i == 0)? Color.green: Color.gray;
+            renderer.material.color = (i == 0)? Color.blue: Color.gray;
             renderer.positionCount = 160;
             for (int fi = 0; fi < 160; fi++)
             {

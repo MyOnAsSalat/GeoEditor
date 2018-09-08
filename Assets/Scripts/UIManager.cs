@@ -10,9 +10,11 @@ public class UIManager : MonoBehaviour, IReceiver
     public GameObject PrefabPoint;
     public GameObject PrefabUIPoint;
     public GameObject PrefabUIFigureImagePanel;
+    public GameObject PrefabUIGraphicImagePanel;
     public Button HideButton;
     public Button RemoveButton;
     public Button AddFigureButton;
+    public Button AddGraphicButton;
     public Button DeselectButton;
     public Button GridButton;
     public Button SpereMeshButton;
@@ -108,17 +110,24 @@ public class UIManager : MonoBehaviour, IReceiver
   
     public void RemoveButton_OnClick()
     {
-        receiver.Destroy();
+        receiver?.Destroy();
     }
     public void AddFigureButton_OnClick()
     {
-        GameObject uiFigure = Instantiate(this.PrefabUIFigureImagePanel, Vector3.zero, Quaternion.identity);
-        AddFigureButton.transform.SetSiblingIndex(transform.Find("Panel/figures_scroll_view/Viewport/Content").childCount - 1);
+        GameObject uiFigure = Instantiate(PrefabUIFigureImagePanel, Vector3.zero, Quaternion.identity);
+     //   AddFigureButton.transform.SetSiblingIndex(transform.Find("Panel/figures_scroll_view/Viewport/Content").childCount - 1);
+    }
+    public void AddGraphicButton_OnClick()
+    {
+     //   Debug.Log("test");
+        GameObject uiGraphic = Instantiate(PrefabUIGraphicImagePanel, Vector3.zero, Quaternion.identity);
+        
     }
     void Start ()
     {
-        AddFigureButton = transform.Find("Panel/figures_scroll_view/Viewport/Content/add_figure_button").GetComponent<Button>();
-        AddFigureButton.onClick.AddListener(AddFigureButton_OnClick);      
+        AddFigureButton = transform.Find("Panel/main_menu_image_panel/add_figure_button").GetComponent<Button>();
+        AddFigureButton.onClick.AddListener(AddFigureButton_OnClick);
+        AddGraphicButton.onClick.AddListener(AddGraphicButton_OnClick);
     }
 
     void Awake()
